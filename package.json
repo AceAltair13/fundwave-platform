@@ -12,7 +12,8 @@
     "dotenv": "^16.4.5",
     "next": "14.2.15",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "thirdweb": "^5.62.0"
   },
   "devDependencies": {
     "@types/node": "^20",
