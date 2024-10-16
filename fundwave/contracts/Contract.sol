@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^ 0.8 .9;
+pragma solidity ^0.8.9;
 
 contract MyContract {
     // Structure to represent a crowdfunding campaign
