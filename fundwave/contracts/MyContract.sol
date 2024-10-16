@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.9;
+pragma solidity ^ 0.8 .9;
 
 contract MyContract {
     // Structure to represent a crowdfunding campaign
@@ -28,7 +28,7 @@ contract MyContract {
         uint256 _targetAmount,
         uint256 _deadline,
         string memory _imageUrl
-    ) public returns (uint256) {
+    ) public returns(uint256) {
         CrowdFundingCampaign storage newCampaign = campaigns[campaignCount];
 
         // Ensuring the deadline is in the future
@@ -59,7 +59,9 @@ contract MyContract {
         campaign.donators.push(msg.sender);
         campaign.donations.push(amount);
 
-        (bool sent, ) = payable(campaign.owner).call{value: amount}("");
+        (bool sent, ) = payable(campaign.owner).call {
+            value: amount
+        }("");
 
         if (sent) {
             campaign.amountCollected = campaign.amountCollected + amount;
@@ -68,15 +70,14 @@ contract MyContract {
 
     function getDonators(
         uint256 _id
-    ) public view returns (address[] memory, uint256[] memory) {
+    ) public view returns(address[] memory, uint256[] memory) {
         return (campaigns[_id].donators, campaigns[_id].donations);
     }
 
     function getCampaigns()
-        public
-        view
-        returns (CrowdFundingCampaign[] memory)
-    {
+    public
+    view
+    returns(CrowdFundingCampaign[] memory) {
         CrowdFundingCampaign[] memory allCampaigns = new CrowdFundingCampaign[](
             campaignCount
         );
