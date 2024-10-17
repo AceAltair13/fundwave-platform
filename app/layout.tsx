@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { ThirdwebProvider } from "thirdweb/react";
 
 export const metadata: Metadata = {
   title: "FundWave",
@@ -13,7 +14,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <ThirdwebProvider>{children}</ThirdwebProvider>
+      </body>
     </html>
   );
 }
