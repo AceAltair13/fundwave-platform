@@ -1,3 +1,7 @@
+"use client";
+
+import { ReactEventHandler, useState } from 'react';
+
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -7,13 +11,63 @@ import { BitcoinIcon } from 'lucide-react'
 
 const CreateCampaign = () => {
 
+  // State for form field
+  const [form, setForm] = useState({
+    name: '',
+    title: '',
+    description: '',
+    target: '',
+    deadline: '',
+    image: ''
+  });
+
+  // Loading state
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Handling input changes
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const {id, value} = e.target;
+    setForm({...form, [id]: value})
+  }
+
+  // Handling form submissions
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Performing form validation
+    if (!form.name || !form.title || !form.description || !form.target || !form.deadline || !form.image) {
+      alert('Please fill in all the required fields.');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      
+      console.log('Form submitted:', form);
+  
+      // Reseting form after successful submission
+      setForm({
+        name: '',
+        title: '',
+        description: '',
+        target: '',
+        deadline: '',
+        image: ''
+      });
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <Card className='max-w-2xl mx-auto p-6 shadow-md'>
       <CardHeader className='pb-4 text-center'>
         <h1 className='text-2xl font-bold'>Start a Campaign</h1>
       </CardHeader>
 
-      <form>
+      <form onSubmit={handleSubmit}>
         <CardContent className='space-y-4'>
           {/* Your Name Field */}
           <div className='space-y-1'>
@@ -21,8 +75,8 @@ const CreateCampaign = () => {
             <Input
               id='name'
               placeholder='John Doe'
-              // value={}
-              // onChange={}
+              value={form.name}
+              onChange={handleInputChange}
             />
           </div>
 
@@ -32,8 +86,8 @@ const CreateCampaign = () => {
             <Input
               id='title'
               placeholder='Write a title'
-              // value={}
-              // onChange={}
+              value={form.title}
+              onChange={handleInputChange}
             />
           </div>
 
@@ -43,8 +97,8 @@ const CreateCampaign = () => {
             <Textarea
               id='description'
               placeholder='Write your story'
-              // value={}
-              // onChange={}
+              value={form.description}
+              onChange={handleInputChange}
             />
           </div>
 
@@ -60,8 +114,8 @@ const CreateCampaign = () => {
             <Input
               id='target'
               placeholder='ETH 0.50'
-              // value={}
-              // onChange={}
+              value={form.target}
+              onChange={handleInputChange}
             />
           </div>
 
@@ -71,8 +125,8 @@ const CreateCampaign = () => {
             <Input
               id='deadline'
               type='date'
-              // value={}
-              // onChange={}
+              value={form.deadline}
+              onChange={handleInputChange}
             />
           </div>
 
@@ -83,14 +137,16 @@ const CreateCampaign = () => {
               id='image'
               placeholder='Place image URL of your campaign'
               type='url'
-              // value={form.image}
-              // onChange={}
+              value={form.image}
+              onChange={handleInputChange}
             />
           </div>
         </CardContent>
 
         <CardFooter className='pt-6'>
-          <Button type='submit' className='w-full bg-green-600 hover:bg-green-700 text-white'>Submit New Campaign</Button>
+          <Button type='submit' className='w-full bg-green-600 hover:bg-green-700 text-white'>
+            {isLoading ? 'Submitting...': 'Submit New Campaign'}
+            </Button>
         </CardFooter>
       </form>
     </Card>
