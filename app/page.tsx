@@ -1,7 +1,20 @@
+'use client';
+
+import { useRouter } from 'next/navigation';
+import _campaigns, { Campaign } from '@/constants/example-campaigns';
+import DisplayCampaigns from '@/components/display-campaigns';
+
+
 export default function Home() {
+
+  const router = useRouter();
+
+  const handleNavigate = () => {
+    router.push(`/`);
+  };
+
   return (
-    <>
-      <h1>Hello World!</h1>
-    </>
+    <DisplayCampaigns title='All Available Campaigns' campaigns={_campaigns} isLoading={false} />
   );
-}
+};
+
