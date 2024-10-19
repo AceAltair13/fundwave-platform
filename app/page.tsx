@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import _campaigns, { Campaign } from '@/constants/example-campaigns';
+import _campaigns from '@/constants/example-campaigns';
 import DisplayCampaigns from '@/components/display-campaigns';
 
 
