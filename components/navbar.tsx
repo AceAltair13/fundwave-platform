@@ -1,13 +1,14 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Home, Search, Menu, User } from 'lucide-react'
 import navlinks from '@/constants/navlinks'
+import { ConnectButton } from 'thirdweb/react'
+import { client } from '@/lib/smartcontract'
 
 export default function Navbar() {
     const router = useRouter()
@@ -33,21 +34,7 @@ export default function Navbar() {
             </div>
 
             <div className="sm:flex hidden flex-row justify-end gap-4">
-                <Button
-                    variant={address ? "default" : "outline"}
-                    onClick={() => {
-                        if (address) router.push('/create-campaign')
-                        else connect()
-                    }}
-                >
-                    {address ? 'Create a campaign' : 'Connect'}
-                </Button>
-
-                <Link href="/profile">
-                    <Button variant="secondary" size="icon">
-                        <User className="h-6 w-6" />
-                    </Button>
-                </Link>
+                <ConnectButton client={client} />
             </div>
 
             {/* Small screen navigation */}
@@ -80,16 +67,7 @@ export default function Navbar() {
                             ))}
                         </nav>
                         <div className="mt-4">
-                            <Button
-                                className="w-full"
-                                variant={address ? "default" : "outline"}
-                                onClick={() => {
-                                    if (address) router.push('/create-campaign')
-                                    else connect()
-                                }}
-                            >
-                                {address ? 'Create a campaign' : 'Connect'}
-                            </Button>
+                            <ConnectButton client={client} />
                         </div>
                     </SheetContent>
                 </Sheet>
