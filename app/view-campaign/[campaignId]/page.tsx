@@ -57,8 +57,8 @@ export default function CampaignDetails() {
     <div className="container mx-auto px-4 py-8">
       {isLoading && <Loader />}
 
-      <div className="grid md:grid-cols-3 gap-6 mt-10">
-        <div className="md:col-span-2">
+      <div className="w-full flex md:flex-row flex-col mt-10 gap-8">
+        <div className="flex-1 flex-col">
           <Image loader={() => mockCampaignData.image} src={mockCampaignData.image} alt="campaign" width={800} height={400} className="rounded-lg object-cover w-full h-[410px]" />
           <Progress value={calculateBarPercentage(mockCampaignData.target, mockCampaignData.amountCollected)} className="mt-2" />
         </div>
