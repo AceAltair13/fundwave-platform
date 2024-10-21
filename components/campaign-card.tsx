@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Tag } from 'lucide-react'
+import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar'
 
 interface CampaignCardProps {
     owner: string
@@ -62,10 +63,11 @@ export default function CampaignCard({
                 <Progress value={parseFloat(amountCollected) / parseFloat(target) * 100} className="mb-4" />
 
                 <div className="flex items-center">
-                    <div className="w-8 h-8 rounded-full bg-secondary flex justify-center items-center mr-2">
-                        <Image alt="User Avatar" loader={() => "https://api.dicebear.com/9.x/identicon/svg?seed=" + owner} src={"https://api.dicebear.com/9.x/identicon/svg?seed=" + owner} width={16} height={16} />
-                    </div>
-                    <p className="text-xs text-muted-foreground">
+                    <Avatar className='w-6 h-6 mr-2'>
+                        <AvatarImage src={`https://api.dicebear.com/9.x/identicon/svg?seed=${owner}`} alt="User Avatar" />
+                        <AvatarFallback>0x</AvatarFallback>
+                    </Avatar>
+                    <p className="text-xs text-muted-foreground truncate">
                         by <span className="font-semibold">{owner}</span>
                     </p>
                 </div>

@@ -13,6 +13,6 @@ export default function Profile() {
   };
 
   return (
-    <DisplayCampaigns title="Your Available Campaigns" campaigns={campaigns} isLoading={false} />
+    <DisplayCampaigns title="Your Available Campaigns" campaigns={campaigns} />
   )
 }
