@@ -8,9 +8,19 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { BitcoinIcon } from 'lucide-react'
-import { useStateContext } from '@/context'
+import { useActiveAccount, useSendTransaction } from 'thirdweb/react'
+import { prepareContractCall } from 'thirdweb'
+import { contract, client } from '@/lib/smartcontract'
 
 const CreateCampaign = () => {
+
+  const {mutate: sendTransaction, data: transactionResult} = useSendTransaction();
+  const account = useActiveAccount();
+
+  console.log(account);
+  if (!account) {
+      console.error("No account connected.");
+  }
 
   // State for form field
   const [form, setForm] = useState({
@@ -24,7 +34,6 @@ const CreateCampaign = () => {
 
   // Loading state
   const [isLoading, setIsLoading] = useState(false);
-  const {createCampaign} = useStateContext();
 
   // Handling input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -36,8 +45,6 @@ const CreateCampaign = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    await createCampaign({...form, target: ethers.utils.parseUnits(form.target, 18)});
-
     // Performing form validation
     if (!form.name || !form.title || !form.description || !form.target || !form.deadline || !form.image) {
       alert('Please fill in all the required fields.');
@@ -48,6 +55,25 @@ const CreateCampaign = () => {
       setIsLoading(true);
       
       console.log('Form submitted:', form);
+      if (!account) {
+        throw new Error("No account connected");
+      }
+
+      // Sending transaction to the contract
+      const transaction = await prepareContractCall({
+        contract,
+        method: "function createCampaign(address _owner, string _title, string _description, uint256 _targetAmount, uint256 _deadline, string _imageUrl) returns (uint256)",
+        params: [
+            String(account.address), // _owner
+            form.title, // _title
+            form.description, // _description
+            BigInt(ethers.utils.parseUnits(form.target, 18).toString()), // _targetAmount
+            BigInt(new Date(form.deadline).getTime()), // _deadline (converted to timestamp)
+            form.image // _imageUrl
+          ],
+    });
+    sendTransaction(transaction);
+    console.log("Contract Call Success");
   
       // Reseting form after successful submission
       setForm({

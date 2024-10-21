@@ -8,7 +8,7 @@ import {ethers} from 'ethers';
 import { Chain } from 'thirdweb';
 import { sepolia } from 'thirdweb/chains'
 import { contract, client } from '@/lib/smartcontract'
-import { redirect, useRouter } from 'next/navigation'
+import { redirect } from 'next/navigation'
 
 interface FormData {
     title: string;
@@ -86,39 +86,39 @@ export const StateContextProvider = ({children}: {children: ReactNode}) => {
         }
     };
 
-    // const getCampaigns = () => {
-    //     const { data, isPending, error } = useReadContract({
-    //         contract, // Your contract object
-    //         method: "function getCampaigns() view returns ((address owner, string title, string description, uint256 targetAmount, uint256 deadline, uint256 amountCollected, string imageUrl, address[] donators, uint256[] donations)[])",
-    //         params: [],
-    //     });
+    const getCampaigns = () => {
+        const { data, isPending, error } = useReadContract({
+            contract, // Your contract object
+            method: "function getCampaigns() view returns ((address owner, string title, string description, uint256 targetAmount, uint256 deadline, uint256 amountCollected, string imageUrl, address[] donators, uint256[] donations)[])",
+            params: [],
+        });
 
-    //     // Handle loading state
-    //     if (isPending) {
-    //         console.log("Loading campaigns...");
-    //         return [];
-    //     }
+        // Handle loading state
+        if (isPending) {
+            console.log("Loading campaigns...");
+            return [];
+        }
 
-    //     // Handle errors
-    //     if (error) {
-    //         console.error("Failed to fetch campaigns:", error);
-    //         return [];
-    //     }
+        // Handle errors
+        if (error) {
+            console.error("Failed to fetch campaigns:", error);
+            return [];
+        }
 
-    //     // Parse and format campaigns if data is available
-    //     const parsedCampaigns: Campaign[] = (data || []).map((campaign: any, i: number) => ({
-    //         owner: campaign.owner,
-    //         title: campaign.title,
-    //         description: campaign.description,
-    //         target: ethers.utils.formatEther(campaign.targetAmount.toString()), // Convert targetAmount to Ether
-    //         deadline: campaign.deadline.toNumber(), // Convert deadline to a number
-    //         amountCollected: ethers.utils.formatEther(campaign.amountCollected.toString()), // Convert collected amount to Ether
-    //         image: campaign.imageUrl,
-    //         pId: i, // Index as ID
-    //     }));
+        // Parse and format campaigns if data is available
+        const parsedCampaigns: Campaign[] = (data || []).map((campaign: any, i: number) => ({
+            owner: campaign.owner,
+            title: campaign.title,
+            description: campaign.description,
+            target: ethers.utils.formatEther(campaign.targetAmount.toString()), // Convert targetAmount to Ether
+            deadline: campaign.deadline.toNumber(), // Convert deadline to a number
+            amountCollected: ethers.utils.formatEther(campaign.amountCollected.toString()), // Convert collected amount to Ether
+            image: campaign.imageUrl,
+            pId: i, // Index as ID
+        }));
 
-    //     return parsedCampaigns;
-    // };
+        return parsedCampaigns;
+    };
 
     // const getUserCampaigns = async (address: string | undefined): Promise<Campaign[]> => {
     //     if (!address) {

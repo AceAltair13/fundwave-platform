@@ -4,6 +4,7 @@ import { ThirdwebProvider } from "thirdweb/react";
 import Sidebar from "@/components/sidebar";
 import Navbar from "@/components/navbar";
 import { ThemeProvider } from "@/components/theme-provider";
+import { StateContextProvider } from '../context'
 
 export const metadata: Metadata = {
   title: "FundWave",
@@ -19,6 +20,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <ThirdwebProvider>
+          {/* <StateContextProvider> */}
           <ThemeProvider attribute="class" defaultTheme="light">
             <div className="relative sm:-8 p-4 bg-background min-h-screen flex flex-row">
               <div className="sm:flex hidden mr-10 relative">
@@ -31,6 +33,7 @@ export default function RootLayout({
               </div>
             </div>
           </ThemeProvider>
+          {/* </StateContextProvider> */}
         </ThirdwebProvider>
       </body>
     </html>
