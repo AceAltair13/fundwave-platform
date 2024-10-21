@@ -1,4 +1,4 @@
-import { Megaphone, PieChart, LogOut, CircleDollarSign, User } from 'lucide-react'
+import { Megaphone, LogOut, CircleDollarSign, User, SquarePen } from 'lucide-react'
 
 interface NavLink {
     name: string
@@ -9,9 +9,9 @@ interface NavLink {
 
 const navlinks: NavLink[] = [
     { name: 'Campaigns', icon: Megaphone, link: '/' },
-    { name: 'Campaign', icon: PieChart, link: '/' },
+    { name: 'Create Campaign', icon: SquarePen, link: '/create-campaign' },
     { name: 'Payment', icon: CircleDollarSign, link: '/' },
-    { name: 'Account', icon: User, link: '/' },
+    { name: 'Profile', icon: User, link: '/profile' },
     { name: 'Log Out', icon: LogOut, link: '/' },
 ]
 

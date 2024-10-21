@@ -15,6 +15,10 @@ export default function Home() {
     params: []
   });
 
+  if (data) {
+    console.log(data);
+  }
+
   const DisplayCampaignSkeleton = () => {
     return (
       <div className="flex flex-col space-y-3">

@@ -1,7 +1,7 @@
 import { Campaign } from "@/constants/example-campaigns";
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
-import { ethers } from "ethers"
+import { clsx, type ClassValue } from "clsx";
+import { ethers } from "ethers";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -12,10 +12,8 @@ export function calculateBarPercentage(target: number, amountCollected: number):
   return Math.min(percentage, 100); // Ensure the percentage doesn't exceed 100
 }
 
-export function daysLeft(deadline: string): number {
-  const difference = new Date(deadline).getTime() - Date.now();
-  const remainingDays = difference / (1000 * 3600 * 24);
-
+export function daysLeft(deadline: number): number {
+  const remainingDays = Math.ceil((deadline - Date.now()) / (1000 * 60 * 60 * 24))
   return remainingDays > 0 ? Math.ceil(remainingDays) : 0;
 }
 
