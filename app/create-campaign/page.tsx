@@ -1,13 +1,14 @@
 "use client";
 
 import { ReactEventHandler, useState } from 'react';
-
+import { ethers } from 'ethers';
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { BitcoinIcon } from 'lucide-react'
+import { useStateContext } from '@/context'
 
 const CreateCampaign = () => {
 
@@ -23,6 +24,7 @@ const CreateCampaign = () => {
 
   // Loading state
   const [isLoading, setIsLoading] = useState(false);
+  const {createCampaign} = useStateContext();
 
   // Handling input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -33,6 +35,8 @@ const CreateCampaign = () => {
   // Handling form submissions
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    await createCampaign({...form, target: ethers.utils.parseUnits(form.target, 18)});
 
     // Performing form validation
     if (!form.name || !form.title || !form.description || !form.target || !form.deadline || !form.image) {
@@ -103,9 +107,11 @@ const CreateCampaign = () => {
           </div>
 
           {/* Icon & Message */}
-          <div className='flex items-center justify-center space-y-3 bg-green-100 py-4 rounded-md'>
-            <BitcoinIcon size={25} color='green' />
-            <h4 className='text-lg font-bold text-green-800'>You will get 100% of the raised amount</h4>
+          <div className="w-full mx-auto flex items-center justify-center space-x-3 bg-green-50 border border-green-200 px-4 py-3 rounded-lg shadow-sm">
+            <BitcoinIcon className="h-6 w-6 text-green-600 flex-shrink-0" />
+            <p className="text-lg font-bold text-green-800">
+              You will get 100% of the raised amount
+            </p>
           </div>
 
           {/* Goal Field */}
