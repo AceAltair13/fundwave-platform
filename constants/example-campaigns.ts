@@ -6,7 +6,6 @@ interface Campaign {
     deadline: number;
     amountCollected: string;
     image: string;
-    handleClick: () => void;
 }
 
 const campaigns: Campaign[] = [
@@ -18,7 +17,6 @@ const campaigns: Campaign[] = [
         deadline: Date.now() + 1000 * 60 * 60 * 24 * 30, // 30 days from now
         amountCollected: '0.50', // Assuming they have reached their target
         image: 'https://picsum.photos/200',
-        handleClick: () => { }
     },
     {
         owner: '0x8ac5092b6f75cde9465e8b5c79',
@@ -28,7 +26,6 @@ const campaigns: Campaign[] = [
         deadline: Date.now() + 1000 * 60 * 60 * 24 * 45, // 45 days from now
         amountCollected: '1.00', // Adjusted collected amount
         image: 'https://picsum.photos/200',
-        handleClick: () => { }
     },
     {
         owner: '0x9d7890fe92c48df54a8f8d9ca1',
@@ -38,7 +35,6 @@ const campaigns: Campaign[] = [
         deadline: Date.now() + 1000 * 60 * 60 * 24 * 60, // 60 days from now
         amountCollected: '0.75', // Amount raised so far
         image: 'https://picsum.photos/200',
-        handleClick: () => { }
     },
     {
         owner: '0xabc1032d4e65f65f05b0c8a1a2',
@@ -48,7 +44,6 @@ const campaigns: Campaign[] = [
         deadline: Date.now() + 1000 * 60 * 60 * 24 * 90, // 90 days from now
         amountCollected: '1.50', // Amount raised so far
         image: 'https://picsum.photos/200',
-        handleClick: () => { }
     },
     {
         owner: '0x1245ad6b7e12f0f054ab9867d9',
@@ -58,7 +53,6 @@ const campaigns: Campaign[] = [
         deadline: Date.now() + 1000 * 60 * 60 * 24 * 120, // 120 days from now
         amountCollected: '2.20', // Amount raised so far
         image: 'https://picsum.photos/200',
-        handleClick: () => { }
     }
 ];
 

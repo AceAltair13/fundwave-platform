@@ -1,4 +1,5 @@
-import { Megaphone, LogOut, CircleDollarSign, User, SquarePen } from 'lucide-react'
+import { GitHubLogoIcon } from '@radix-ui/react-icons'
+import { CircleDollarSign, Compass, LogOut, SquarePen, User } from 'lucide-react'
 
 interface NavLink {
     name: string
@@ -8,11 +9,11 @@ interface NavLink {
 }
 
 const navlinks: NavLink[] = [
-    { name: 'Campaigns', icon: Megaphone, link: '/' },
+    { name: 'Explore Campaigns', icon: Compass, link: '/' },
     { name: 'Create Campaign', icon: SquarePen, link: '/create-campaign' },
-    { name: 'Payment', icon: CircleDollarSign, link: '/' },
+    { name: 'Withdraw', icon: CircleDollarSign, link: '/' },
     { name: 'Profile', icon: User, link: '/profile' },
-    { name: 'Log Out', icon: LogOut, link: '/' },
+    { name: 'Project Link', icon: GitHubLogoIcon, link: 'https://github.com/AceAltair13/fundwave-platform' },
 ]
 
 export default navlinks
