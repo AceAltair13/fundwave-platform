@@ -6,29 +6,26 @@ import Image from "next/image";
 import { useReadContract } from "thirdweb/react";
 
 export function Backers({ _id }: { _id: number }) {
-    // Get the donators for the selected campaign
+    // Fetch the donators for the selected campaign
     const { data } = useReadContract({
         contract,
         method: "function getDonators(uint256 _id) view returns (address[], uint256[])",
         params: [BigInt(_id)],
     });
 
-    function getBackerCount() {
-        if (!data) return 0;
-        return data[0].length;
-    }
+    const backerCount = data ? data[0].length : 0;
 
-    return (data && (
-        <CountBox title="Total Backers" value={getBackerCount()} />
-    ));
+    return (
+        data && <CountBox title="Total Backers" value={backerCount} />
+    );
 }
 
 export function Donators({ _id }: { _id: number }) {
-    // Get the donators for the selected campaign
+    // Fetch the donators for the selected campaign
     const { data } = useReadContract({
         contract,
         method: "function getDonators(uint256 _id) view returns (address[], uint256[])",
-        params: [BigInt(_id)]
+        params: [BigInt(_id)],
     });
 
     return (
@@ -51,20 +48,18 @@ export function Donators({ _id }: { _id: number }) {
                 )}
             </CardContent>
         </Card>
-    )
+    );
 }
 
 export function OwnerCard({ owner }: { owner: string }) {
+    // Fetch campaigns for the current owner
     const { data } = useReadContract({
         contract,
         method: "function getCampaigns() view returns ((address owner, string title, string description, uint256 targetAmount, uint256 deadline, uint256 amountCollected, string imageUrl, address[] donators, uint256[] donations)[])",
-        params: []
+        params: [],
     });
 
-    function getOwnerCampaignCount() {
-        if (!data) return 0;
-        return data.filter((campaign: any) => campaign.owner === owner).length;
-    }
+    const ownerCampaignCount = data ? data.filter((campaign: any) => campaign.owner === owner).length : 0;
 
     return (
         <Card>
@@ -73,13 +68,19 @@ export function OwnerCard({ owner }: { owner: string }) {
             </CardHeader>
             <CardContent className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center">
-                    <Image loader={() => "https://api.dicebear.com/9.x/identicon/svg?seed=" + owner} src={"https://api.dicebear.com/9.x/identicon/svg?seed=" + owner} alt="user" width={30} height={30} />
+                    <Image
+                        loader={() => `https://api.dicebear.com/9.x/identicon/svg?seed=${owner}`}
+                        src={`https://api.dicebear.com/9.x/identicon/svg?seed=${owner}`}
+                        alt="user"
+                        width={30}
+                        height={30}
+                    />
                 </div>
                 <div>
                     <p className="font-semibold">{owner}</p>
-                    <p className="text-sm text-muted-foreground">{`${getOwnerCampaignCount()} Campaigns`}</p>
+                    <p className="text-sm text-muted-foreground">{`${ownerCampaignCount} Campaigns`}</p>
                 </div>
             </CardContent>
         </Card>
-    )
+    );
 }

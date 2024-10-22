@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useActiveAccount } from 'thirdweb/react';
+import { useToast } from '@/hooks/use-toast';
 
 import { createCampaign } from '@/lib/contractUtils';
 import { contract } from '@/lib/smartcontract';
@@ -18,9 +19,11 @@ import { Textarea } from '@/components/ui/textarea';
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
 import { BitcoinIcon } from 'lucide-react';
 
+
 const CreateCampaign = () => {
   const account = useActiveAccount();
   const router = useRouter();
+  const { toast } = useToast();
 
   const [form, setForm] = useState({
     name: '',
@@ -66,6 +69,10 @@ const CreateCampaign = () => {
         image: ''
       });
       router.push('/');
+      toast({
+        title: 'Campaign Created',
+        description: 'It should reflect in the campaign list shortly.',
+      })
     } catch (error) {
       console.error('Error submitting campaign:', error);
     } finally {

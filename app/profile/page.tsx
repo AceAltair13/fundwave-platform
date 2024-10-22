@@ -8,7 +8,6 @@ import { getParsedCampaigns } from '@/lib/utils';
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
 import { useActiveAccount, useReadContract } from 'thirdweb/react';
 
-
 export default function Profile() {
   const account = useActiveAccount();
 
@@ -18,14 +17,12 @@ export default function Profile() {
     params: []
   });
 
-  const DisplayCampaignSkeleton = () => {
-    return (
-      <>
-        <h1 className="text-xl font-semibold">Fetching Your Campaigns...</h1>
-        <FetchCampaignSkeleton />
-      </>
-    );
-  }
+  const DisplayCampaignSkeleton = () => (
+    <>
+      <h1 className="text-xl font-semibold">Fetching Your Campaigns...</h1>
+      <FetchCampaignSkeleton />
+    </>
+  );
 
   if (!account && !isPending) {
     return (
@@ -36,20 +33,20 @@ export default function Profile() {
           Your session has expired or you have not logged into a wallet. Please log in again.
         </AlertDescription>
       </Alert>
-    )
+    );
   }
+
+  const filteredCampaigns = data?.filter((campaign: any) => campaign.owner === account?.address) || [];
 
   return (
     <>
-      {!data && isPending && <DisplayCampaignSkeleton />}
+      {isPending && !data && <DisplayCampaignSkeleton />}
       {data && (
         <DisplayCampaigns
-          title='Your Campaigns'
-          campaigns={getParsedCampaigns(
-            data.filter((campaign: any) => campaign.owner === account?.address)
-          )}
+          title="Your Campaigns"
+          campaigns={getParsedCampaigns(filteredCampaigns)}
         />
       )}
     </>
-  )
+  );
 }
