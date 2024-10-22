@@ -1,5 +1,5 @@
 import { GitHubLogoIcon } from '@radix-ui/react-icons'
-import { CircleDollarSign, Compass, LogOut, SquarePen, User } from 'lucide-react'
+import { CircleDollarSign, Compass, SquarePen, User } from 'lucide-react'
 
 interface NavLink {
     name: string

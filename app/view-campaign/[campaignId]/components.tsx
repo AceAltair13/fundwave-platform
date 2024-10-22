@@ -1,9 +1,9 @@
+import { CountBox } from "@/components/count-box";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { contract } from "@/lib/smartcontract";
-import { useReadContract } from "thirdweb/react";
 import { ethers } from "ethers";
-import { CountBox } from "@/components/count-box";
 import Image from "next/image";
+import { useReadContract } from "thirdweb/react";
 
 export function Backers({ _id }: { _id: number }) {
     // Get the donators for the selected campaign

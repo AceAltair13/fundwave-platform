@@ -1,11 +1,10 @@
 'use client';
 
 import DisplayCampaigns from '@/components/display-campaigns';
-import campaigns from '@/constants/example-campaigns';
-import { useActiveAccount, useReadContract } from 'thirdweb/react';
-import { contract } from '@/lib/smartcontract';
 import { Skeleton } from '@/components/ui/skeleton';
+import { contract } from '@/lib/smartcontract';
 import { getParsedCampaigns } from '@/lib/utils';
+import { useActiveAccount, useReadContract } from 'thirdweb/react';
 
 
 export default function Profile() {

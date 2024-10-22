@@ -1,9 +1,9 @@
-import type { Metadata } from "next";
-import "./globals.css";
-import { ThirdwebProvider } from "thirdweb/react";
-import Sidebar from "@/components/sidebar";
 import Navbar from "@/components/navbar";
+import Sidebar from "@/components/sidebar";
 import { ThemeProvider } from "@/components/theme-provider";
+import type { Metadata } from "next";
+import { ThirdwebProvider } from "thirdweb/react";
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "FundWave",

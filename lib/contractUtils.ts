@@ -1,6 +1,6 @@
-import { contract } from "@/lib/smartcontract"
-import { prepareContractCall, sendTransaction } from "thirdweb";
+import { contract } from "@/lib/smartcontract";
 import { ethers } from "ethers";
+import { prepareContractCall, sendTransaction } from "thirdweb";
 
 // Define the CreateCampaignForm interface
 interface CreateCampaignForm {

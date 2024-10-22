@@ -1,18 +1,17 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import fundwave from "@/assets/fundwave.png"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { Home, Search, Menu, User } from 'lucide-react'
 import navlinks from '@/constants/navlinks'
-import { ConnectButton } from 'thirdweb/react'
 import { client } from '@/lib/smartcontract'
+import { Home, Menu } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import Image from 'next/image'
-import fundwave from "@/assets/fundwave.png"
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { ConnectButton } from 'thirdweb/react'
 
 export default function Navbar() {
     const { theme } = useTheme()
