@@ -3,6 +3,7 @@ import { Progress } from "@/components/ui/progress"
 import Image from 'next/image'
 import Link from 'next/link'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
+import { daysLeft } from "@/lib/utils"
 
 interface CampaignCardProps {
     index: number
@@ -25,7 +26,7 @@ export default function CampaignCard({
     amountCollected,
     image
 }: CampaignCardProps) {
-    const remainingDays = Math.ceil((deadline - Date.now()) / (1000 * 60 * 60 * 24))
+    const remainingDays = daysLeft(deadline)
 
     return (
         <Link href={`/view-campaign/${index}`}>
@@ -35,17 +36,13 @@ export default function CampaignCard({
                         loader={() => image}
                         src={image}
                         alt="fund"
-                        width={288}
-                        height={158}
-                        className="w-full h-[158px] object-cover rounded-t-lg"
+                        height={200}
+                        width={200}
+                        className="w-full h-40 object-cover rounded-t-lg"
                         unoptimized
                     />
                 </CardHeader>
                 <CardContent className="p-4">
-                    {/* <div className="flex items-center mb-4">
-                        <Tag className="w-4 h-4 mr-2" />
-                        <Badge variant="secondary">Education</Badge>
-                    </div> */}
 
                     <h3 className="text-lg font-semibold leading-tight mb-2 truncate">{title}</h3>
                     <p className="text-sm text-muted-foreground mb-4 truncate">{description}</p>
