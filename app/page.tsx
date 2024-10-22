@@ -1,7 +1,7 @@
 'use client';
 
 import DisplayCampaigns from '@/components/display-campaigns';
-import { Skeleton } from '@/components/ui/skeleton';
+import FetchCampaignSkeleton from '@/components/fetch-campaigns-skeleton';
 import { contract } from '@/lib/smartcontract';
 import { getParsedCampaigns } from '@/lib/utils';
 import { useReadContract } from 'thirdweb/react';
@@ -20,13 +20,10 @@ export default function Home() {
 
   const DisplayCampaignSkeleton = () => {
     return (
-      <div className="flex flex-col space-y-3">
-        <Skeleton className="h-[125px] w-[250px] rounded-xl" />
-        <div className="space-y-2">
-          <Skeleton className="h-4 w-[250px]" />
-          <Skeleton className="h-4 w-[200px]" />
-        </div>
-      </div>
+      <>
+        <h1 className="text-xl font-semibold">Fetching All Campaigns...</h1>
+        <FetchCampaignSkeleton />
+      </>
     );
   }
 
