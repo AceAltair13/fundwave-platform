@@ -2,7 +2,6 @@
 
 import { ethers } from 'ethers'
 import Image from 'next/image'
-import { redirect } from 'next/navigation'
 import { useState } from 'react'
 
 import { Button } from "@/components/ui/button"
@@ -12,72 +11,96 @@ import { Progress } from "@/components/ui/progress"
 
 import { CountBox } from '@/components/count-box'
 import { calculateBarPercentage, daysLeft } from '@/lib/utils'
-import { useReadContract } from 'thirdweb/react'
+import { useActiveAccount, useReadContract } from 'thirdweb/react'
 
 import { Skeleton } from '@/components/ui/skeleton'
 import { contract } from '@/lib/smartcontract'
 
-// Mocking the data that would normally come from context or props
-const mockCampaignData = {
-  pId: '1',
-  owner: '0x1234...5678',
-  title: 'Example Campaign',
-  description: 'This is an example campaign description.',
-  target: 1.5,
-  deadline: Math.floor(Date.now() / 1000) + 30 * 24 * 60 * 60, // 30 days from now
-  amountCollected: 0.5,
-  image: 'https://picsum.photos/seed/picsum/536/354',
-}
+import { Loader } from '@/components/loader'
+import { redirect, useRouter } from 'next/navigation'
+import { prepareContractCall, sendTransaction } from "thirdweb"
+import { Backers, Donators, OwnerCard } from './components'
 
-const mockDonators = [
-  { donator: '0xabcd...efgh', donation: ethers.utils.parseEther('10') },
-  { donator: '0x9876...5432', donation: ethers.utils.parseEther('5') },
+const nullCampaignData = [
+  "0x0000000000000000000000000000000000000000", // Address [0]
+  "", // Title [1]
+  "", // Description [2]
+  BigInt(0), // Target Amount [3]
+  BigInt(0), // Deadline [4]
+  BigInt(0), // Amount Collected [5]
+  "" // Image URL [6]
 ]
 
 export default function CampaignDetails({ params }: { params: { campaignId: number } }) {
 
-  if (isNaN(params.campaignId)) {
-    redirect('/'); // Redirect if campaignId is not a number
+  if (isNaN(params.campaignId) || params.campaignId < 0) {
+    redirect('/'); // Redirect to home if campaignId is invalid
   }
 
   const { data, isPending } = useReadContract({
     contract,
-    method: "function getCampaigns() view returns ((address owner, string title, string description, uint256 targetAmount, uint256 deadline, uint256 amountCollected, string imageUrl, address[] donators, uint256[] donations)[])",
-    params: []
+    method: "function campaigns(uint256) view returns (address owner, string title, string description, uint256 targetAmount, uint256 deadline, uint256 amountCollected, string imageUrl)",
+    params: [BigInt(params.campaignId)],
   });
 
-
-  const currentCampaign = data ? data[params.campaignId] : null;
-
-  if (data && params.campaignId >= data.length) {
-    redirect('/'); // Redirect if campaignId is out of bounds
+  if (data && data[0] === nullCampaignData[0]) {
+    redirect('/'); // Redirect to home if campaign does not exist
   }
 
-  const [isLoading, setIsLoading] = useState(false)
-  const [amount, setAmount] = useState('')
+  const [amount, setAmount] = useState<string>('');
+  const [isLoading, setIsLoading] = useState(false);
+  const account = useActiveAccount();
+  const router = useRouter();
 
-  const remainingDays = daysLeft(Number(currentCampaign?.deadline ?? 0))
+  const remainingDays = data ? daysLeft(Number(data[4])) : 0;
 
   const handleDonate = async () => {
     setIsLoading(true)
-    // Simulate a donation process
-    setIsLoading(false)
-  }
 
-  const getCountOfUserCampaigns = (owner: string | undefined) => {
-    var i = 0;
-    if (!data) return 0;
-    for (const campaign of data) {
-      if (campaign.owner === owner) {
-        i++;
-      }
+    if (amount === '' || Number(amount) <= 0) {
+      alert("Please enter a valid amount");
+      setIsLoading(false)
+      return;
     }
-    return i;
+
+    if (!account) {
+      alert("Please connect your wallet");
+      setIsLoading(false)
+      return;
+    }
+
+    try {
+      const transaction = prepareContractCall({
+        contract,
+        method: "function donateCampaign(uint256 _id) payable",
+        params: [BigInt(params.campaignId)],
+        value: ethers.utils.parseEther(amount).toBigInt()
+      });
+
+      const { transactionHash } = await sendTransaction({
+        transaction,
+        account
+      });
+
+      if (!transactionHash) {
+        throw new Error("Transaction failed");
+      }
+
+      setTimeout(() => {
+        console.log("Transaction Hash:", transactionHash);
+        setIsLoading(false)
+        router.push("/"); // Redirect to home after donation
+      }, 6000)
+    } catch (error) {
+      console.error("Transaction failed:", error);
+      alert("Transaction failed. Please try again.");
+      setIsLoading(false)
+    }
   }
 
   if (isPending) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 pb-8">
         <div className="w-full flex md:flex-row flex-col mt-10 gap-8">
           <Skeleton className="w-full h-[410px] rounded-lg" />
           <div className="flex flex-col gap-4">
@@ -100,67 +123,36 @@ export default function CampaignDetails({ params }: { params: { campaignId: numb
     )
   }
 
-  return (
-    <div className="container mx-auto px-4 py-8">
-
+  return (data && (
+    <div className="container mx-auto px-4 pb-8">
+      {isLoading && <Loader />}
       <div className="w-full flex md:flex-row flex-col mt-10 gap-8">
         <div className="flex-1 flex-col">
-          <Image loader={() => currentCampaign?.imageUrl || mockCampaignData.image} src={currentCampaign?.imageUrl || mockCampaignData.image} alt="campaign" width={800} height={400} className="rounded-lg object-cover w-full h-[410px]" />
-          <Progress value={calculateBarPercentage(Number(currentCampaign?.targetAmount), Number(currentCampaign?.amountCollected))} className="mt-2" />
+          <Image loader={() => data[6]} src={data[6]} alt="campaign" width={800} height={400} className="rounded-lg object-cover w-full h-[410px]" />
+          <Progress value={calculateBarPercentage(Number(data[3]), Number(data[5]))} className="mt-2" />
         </div>
 
         <div className="flex flex-col gap-4">
           <CountBox title="Days Left" value={remainingDays} />
-          <CountBox title={`Raised of ${currentCampaign?.targetAmount ? ethers.utils.formatEther(currentCampaign.targetAmount) : '0'} ETH`} value={ethers.utils.formatEther(currentCampaign?.amountCollected ?? 0)} />
-          <CountBox title="Total Backers" value={currentCampaign ? currentCampaign.donators.length : 0} />
+          <CountBox title={`Raised of ${ethers.utils.formatEther(data[3])} ETH`} value={ethers.utils.formatEther(data[5])} />
+          <Backers _id={params.campaignId} />
         </div>
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6 mt-12">
         <div className="lg:col-span-2 space-y-8">
-          <Card>
-            <CardHeader>
-              <CardTitle>Creator</CardTitle>
-            </CardHeader>
-            <CardContent className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center">
-                <Image loader={() => "https://api.dicebear.com/9.x/identicon/svg?seed=" + currentCampaign?.owner} src={"https://api.dicebear.com/9.x/identicon/svg?seed=" + currentCampaign?.owner} alt="user" width={30} height={30} />
-              </div>
-              <div>
-                <p className="font-semibold">{currentCampaign?.owner}</p>
-                <p className="text-sm text-muted-foreground">{`${getCountOfUserCampaigns(currentCampaign?.owner)} Campaigns`}</p>
-              </div>
-            </CardContent>
-          </Card>
+          <OwnerCard owner={data[0]} />
 
           <Card>
             <CardHeader>
               <CardTitle>Story</CardTitle>
             </CardHeader>
             <CardContent>
-              <p>{currentCampaign?.description}</p>
+              <p>{data[2]}</p>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Donators</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {currentCampaign && currentCampaign.donators.length > 0 ? (
-                <ul className="space-y-2">
-                  {currentCampaign.donators.map((_donator, index) => (
-                    <li key={`${_donator}-${index}`} className="flex justify-between items-center">
-                      <span>{index + 1}. {_donator}</span>
-                      <span>{ethers.utils.formatEther(currentCampaign.donations[index])} ETH</span>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p>No donators yet. Be the first one!</p>
-              )}
-            </CardContent>
-          </Card>
+          <Donators _id={params.campaignId} />
         </div>
 
         <div>
@@ -194,5 +186,5 @@ export default function CampaignDetails({ params }: { params: { campaignId: numb
         </div>
       </div>
     </div>
-  )
+  ))
 }
