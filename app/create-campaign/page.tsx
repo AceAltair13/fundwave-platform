@@ -1,83 +1,77 @@
 "use client";
 
-import { Loader } from '@/components/loader';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { createCampaign } from '@/lib/contractUtils';
-import { contract } from '@/lib/smartcontract';
-import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
-import { BitcoinIcon } from 'lucide-react';
-import { redirect } from 'next/navigation';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useActiveAccount } from 'thirdweb/react';
 
+import { createCampaign } from '@/lib/contractUtils';
+import { contract } from '@/lib/smartcontract';
+
+import { Loader } from '@/components/loader';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
+import { Textarea } from '@/components/ui/textarea';
+
+import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
+import { BitcoinIcon } from 'lucide-react';
+
 const CreateCampaign = () => {
-
   const account = useActiveAccount();
+  const router = useRouter();
 
-  const defaultFormState = {
+  const [form, setForm] = useState({
     name: '',
     title: '',
     description: '',
     target: '',
     deadline: '',
     image: ''
-  }
+  });
 
-  // State for form field
-  const [form, setForm] = useState(defaultFormState);
-
-  // Loading state
   const [isLoading, setIsLoading] = useState(false);
 
-  // Handling input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target;
-    setForm({ ...form, [id]: value })
-  }
+    setForm((prevForm) => ({ ...prevForm, [id]: value }));
+  };
 
-  // Handling form submissions
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Performing form validation
-    if (!form.title || !form.description || !form.target || !form.deadline || !form.image) {
+    const { title, description, target, deadline, image } = form;
+
+    if (!title || !description || !target || !deadline || !image) {
       alert('Please fill in all the required fields.');
       return;
     }
 
+    if (!account) {
+      alert('No account connected');
+      return;
+    }
+
+    setIsLoading(true);
+
     try {
-      setIsLoading(true);
-
-      console.log('Form submitted:', form);
-
-      if (!account) {
-        throw new Error("No account connected");
-      }
-
-      await createCampaign({
-        form: form,
-        account: account,
-        _contract: contract
-      })
-
-      // Reseting form after successful submission
-      setForm(defaultFormState);
-
-      // Redirect to campaign page
-      setIsLoading(false);
-      redirect('/view-campaign/');
+      await createCampaign({ form, account, _contract: contract });
+      setForm({
+        name: '',
+        title: '',
+        description: '',
+        target: '',
+        deadline: '',
+        image: ''
+      });
+      router.push('/');
     } catch (error) {
-      console.error('Error submitting form:', error);
+      console.error('Error submitting campaign:', error);
     } finally {
       setIsLoading(false);
     }
   };
-
 
   if (!account) {
     return (
@@ -88,7 +82,7 @@ const CreateCampaign = () => {
           Your session has expired or you have not logged into a wallet. Please log in again.
         </AlertDescription>
       </Alert>
-    )
+    );
   }
 
   return (
@@ -101,84 +95,52 @@ const CreateCampaign = () => {
 
         <form onSubmit={handleSubmit}>
           <CardContent className='space-y-4'>
-            {/* Your Name Field */}
-            <div className='space-y-1'>
-              <Label htmlFor='name' className='text-sm font-medium'>Your Wallet Address</Label>
-              <Input
-                id='name'
-                placeholder='Fetching wallet address...'
-                value={account?.address}
-                onChange={handleInputChange}
-                disabled
-              />
-            </div>
-
-            {/* Campaign Title Field */}
-            <div className='space-y-1'>
-              <Label htmlFor='title' className='text-sm font-medium'>Campaign Title *</Label>
-              <Input
-                id='title'
-                placeholder='Write a title'
-                value={form.title}
-                onChange={handleInputChange}
-              />
-            </div>
-
-            {/* Story Field */}
-            <div className='space-y-1'>
-              <Label htmlFor='description' className='text-sm font-medium'>Story *</Label>
-              <Textarea
-                id='description'
-                placeholder='Write your story'
-                value={form.description}
-                onChange={handleInputChange}
-              />
-            </div>
-
-            {/* Icon & Message */}
-            <div className="w-full mx-auto flex items-center justify-center space-x-3 bg-green-50 border border-green-200 px-4 py-3 rounded-lg shadow-sm">
-              <BitcoinIcon className="h-6 w-6 text-green-600 flex-shrink-0" />
-              <p className="text-lg font-bold text-green-800">
-                You will get 100% of the raised amount
-              </p>
-            </div>
-
-            {/* Goal Field */}
-            <div className='space-y-1'>
-              <Label htmlFor='target' className='text-sm font-medium'>Goal *</Label>
-              <Input
-                id='target'
-                placeholder='ETH 0.50'
-                value={form.target}
-                onChange={handleInputChange}
-              />
-            </div>
-
-            {/* End Data Field */}
-            <div className='space-y-1'>
-              <Label htmlFor='deadline' className='text-sm font-medium'>End Date *</Label>
-              <Input
-                id='deadline'
-                type='date'
-                value={form.deadline}
-                onChange={handleInputChange}
-              />
-            </div>
-
-            {/* Campaign Image Field */}
-            <div className='space-y-1'>
-              <Label htmlFor='image' className='text-sm font-medium'>Campaign Image</Label>
-              <Input
-                id='image'
-                placeholder='Place image URL of your campaign'
-                type='url'
-                value={form.image}
-                onChange={handleInputChange}
-              />
-            </div>
-            {/* Campaign Image Preview */}
+            <InputField
+              id="name"
+              label="Your Wallet Address"
+              value={account?.address || 'Fetching wallet address...'}
+              onChange={() => { }}
+              disabled
+            />
+            <InputField
+              id="title"
+              label="Campaign Title *"
+              placeholder="Write a title"
+              value={form.title}
+              onChange={handleInputChange}
+            />
+            <TextareaField
+              id="description"
+              label="Story *"
+              placeholder="Write your story"
+              value={form.description}
+              onChange={handleInputChange}
+            />
+            <CampaignInfoMessage />
+            <InputField
+              id="target"
+              label="Goal *"
+              placeholder="ETH 0.50"
+              value={form.target}
+              onChange={handleInputChange}
+            />
+            <InputField
+              id="deadline"
+              label="End Date *"
+              type="date"
+              value={form.deadline}
+              onChange={handleInputChange}
+            />
+            <InputField
+              id="image"
+              label="Campaign Image"
+              placeholder="Place image URL of your campaign"
+              type="url"
+              value={form.image}
+              onChange={handleInputChange}
+            />
             {form.image && (
-              <img src={form.image} alt='Campaign Image Preview' className='w-full h-48 object-cover rounded-md' />
+              <img src={form.image} alt="Campaign Image Preview" className='w-full h-48 object-cover rounded-md' />
             )}
           </CardContent>
 
@@ -190,7 +152,38 @@ const CreateCampaign = () => {
         </form>
       </Card>
     </>
-  )
+  );
+};
+
+interface InputFieldProps {
+  id: string;
+  label: string;
+  placeholder?: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  disabled?: boolean;
+  type?: string;
 }
+
+const InputField = ({ id, label, placeholder, value, onChange, disabled = false, type = "text" }: InputFieldProps) => (
+  <div className='space-y-1'>
+    <Label htmlFor={id} className='text-sm font-medium'>{label}</Label>
+    <Input id={id} placeholder={placeholder} value={value} onChange={onChange} disabled={disabled} type={type} />
+  </div>
+);
+
+const TextareaField = ({ id, label, placeholder, value, onChange }: { id: string; label: string; placeholder: string; value: string; onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void }) => (
+  <div className='space-y-1'>
+    <Label htmlFor={id} className='text-sm font-medium'>{label}</Label>
+    <Textarea id={id} placeholder={placeholder} value={value} onChange={onChange} />
+  </div>
+);
+
+const CampaignInfoMessage = () => (
+  <div className="w-full mx-auto flex items-center justify-center space-x-3 bg-green-50 border border-green-200 px-4 py-3 rounded-lg shadow-sm">
+    <BitcoinIcon className="h-6 w-6 text-green-600 flex-shrink-0" />
+    <p className="text-lg font-bold text-green-800">You will get 100% of the raised amount</p>
+  </div>
+);
 
 export default CreateCampaign;
