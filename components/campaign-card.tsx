@@ -1,7 +1,5 @@
-import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
-import { Tag } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
@@ -40,13 +38,14 @@ export default function CampaignCard({
                         width={288}
                         height={158}
                         className="w-full h-[158px] object-cover rounded-t-lg"
+                        unoptimized
                     />
                 </CardHeader>
                 <CardContent className="p-4">
-                    <div className="flex items-center mb-4">
+                    {/* <div className="flex items-center mb-4">
                         <Tag className="w-4 h-4 mr-2" />
                         <Badge variant="secondary">Education</Badge>
-                    </div>
+                    </div> */}
 
                     <h3 className="text-lg font-semibold leading-tight mb-2 truncate">{title}</h3>
                     <p className="text-sm text-muted-foreground mb-4 truncate">{description}</p>

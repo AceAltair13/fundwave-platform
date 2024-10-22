@@ -1,8 +1,5 @@
 'use client'
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import {
     Tooltip,
@@ -10,14 +7,13 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
-import FundwaveImage from '@/assets/fundwave.png'
-import { useTheme } from 'next-themes'
-import Image from 'next/image'
 import navlinks from '@/constants/navlinks'
-import { Sun } from 'lucide-react'
-
-
+import { Home, Sun } from 'lucide-react'
+import { useTheme } from 'next-themes'
 
 export default function Sidebar() {
     const router = useRouter()
@@ -28,11 +24,10 @@ export default function Sidebar() {
     return (
         <div className="flex justify-between items-center flex-col sticky top-5 h-[93vh]">
             <Link href="/">
-                <Button variant={theme == 'light' ? "default" : "secondary"} size="icon" className="w-[52px] h-[52px]">
-                    <Image src={FundwaveImage} alt="Fundwave Logo" />
+                <Button variant="outline" size="icon" className="w-[52px] h-[52px]">
+                    <Home />
                 </Button>
             </Link>
-
             <div className="flex-1 flex flex-col justify-between items-center rounded-[20px] w-[76px] py-4 mt-12">
                 <div className="flex flex-col justify-center items-center gap-3">
                     {navlinks.map((link) => (
