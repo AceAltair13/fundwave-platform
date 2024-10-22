@@ -26,7 +26,6 @@ export function getParsedCampaigns(data: any[],): Campaign[] {
     deadline: Number(campaign.deadline), // Convert deadline to a number
     amountCollected: ethers.utils.formatEther(campaign.amountCollected.toString()), // Convert collected amount to Ether
     image: campaign.imageUrl,
-    handleClick: () => { },
     pId: i, // Index as ID
   }));
 }
