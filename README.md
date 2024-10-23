@@ -49,7 +49,6 @@ fundwave-platform/
 └── README.md
 ```
 
-
 - **app/**: Contains the main application pages and global styles.
     - **create-campaign/**: page for creating campaigns.
     - **view-campaign/**: page for viewing campaigns.
@@ -72,15 +71,15 @@ To set up the project locally, follow these steps:
 
 1. **Clone the repository**:
    ```sh
-   git clone https://github.com/AceAltair13/fundwave-platform.git
-   cd fundwave-platform
-
+    git clone https://github.com/AceAltair13/fundwave-platform.git
+    cd fundwave-platform
+    ```
 2. **Install dependencies:**
     ```sh
     npm install
     ```
 
-3. **Set up environment variables:** Copy the .env.local.example file to .env.local and update the variables as needed.
+3. **Set up environment variables:** Copy the `.env.local.example` file to `.env.local` and update the variables as needed.
 
 4. **Run the development server:**
     ```sh
@@ -95,16 +94,18 @@ To set up the project locally, follow these steps:
 
 5. **Open the application:** Open http://localhost:3000 with your browser to see the result.
 
-Learn More
-To learn more about Next.js, take a look at the following resources:
+## Conclusion
 
-Next.js Documentation - learn about Next.js features and API.
-Learn Next.js - an interactive Next.js tutorial.
-You can check out the Next.js GitHub repository - your feedback and contributions are welcome!
+This project demonstrates the potential of decentralized crowdfunding platforms powered by blockchain technology. By leveraging smart contracts, we can create a trustless environment that ensures transparency and security for both campaign creators and supporters.
 
-Deploy on Vercel
-The easiest way to deploy your Next.js app is to use the Vercel Platform from the creators of Next.js.
+## References
+- [Thirdweb Documentation](https://portal.thirdweb.com/)
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+- [ShadCN UI Documentation](https://shadcn.dev/docs)
 
-Check out our Next.js deployment documentation for more details.
-
+## Additional Notes
+- Ensure you have a web3 wallet like MetaMask installed and configured.
+- Use a local blockchain environment like Thirdweb for testing and development.
+- Follow best practices for smart contract development and security.
 
