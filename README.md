@@ -4,10 +4,10 @@
 A Decentralized Crowdfunding Platform Powered By Blockchain
 
 ## Team Members
-- Tirth Shailesh Thoria (031149064) [GitHub](https://github.com/AceAltair13)
-- Laksh Chandrabhan Jadhwani (032166249) [GitHub](https://github.com/lakshjadhwanilj)
-- Avantika Singh (031376590) [GitHub](https://github.com/avantikasingh02)
-- Kunal Rajendra Pandey (031753941) [GitHub](https://github.com/kunalp10)
+- [Tirth Shailesh Thoria (031149064)](https://github.com/AceAltair13)
+- [Laksh Chandrabhan Jadhwani (032166249)](https://github.com/lakshjadhwanilj)
+- [Avantika Singh (031376590)](https://github.com/avantikasingh02)
+- [Kunal Rajendra Pandey (031753941)](https://github.com/kunalp10)
 
 ## Introduction
 This project aims to develop a decentralized crowdfunding platform leveraging blockchain technology. The platform allows users to create and support campaigns securely and transparently. By utilizing smart contracts, we ensure that funds are only released when campaign goals are met, providing a trustless environment for both campaign creators and supporters.
