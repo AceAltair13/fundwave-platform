@@ -16,6 +16,9 @@ This project aims to develop a decentralized crowdfunding platform leveraging bl
 - [Prerequisites](#prerequisites)
 - [Project Structure](#project-structure)
 - [Installation](#installation)
+- [Conclusion](#conclusion)
+- [References](#references)
+- [Additional Notes](#additional-notes)
 
 ## Prerequisites
 Before you begin, ensure you have met the following requirements:
